@@ -1,0 +1,74 @@
+{%- comment -%}
+  A progressively-enhanced add-to-cart form.
+
+  Works as a plain POST to /cart/add without JavaScript; when
+  assets/theme.js is loaded it is intercepted and submitted via the
+  Ajax Cart API instead, so the cart drawer updates without a page
+  reload.
+
+  Accepts:
+  - product: required.
+  - variant: optional. Defaults to the product's selected/first
+    available variant. Pass the currently selected variant from the
+    product page so quick-add and the PDP behave identically.
+  - show_quantity: optional boolean, default false.
+  - section_id: required, used to keep form/input ids unique when a
+    product card is rendered many times on one page.
+{%- endcomment -%}
+
+{%- liquid
+  assign variant = variant | default: product.selected_or_first_available_variant
+  assign show_quantity = show_quantity | default: false
+  assign form_id = 'product-form-' | append: section_id
+-%}
+
+<product-form>
+  {%- form 'product', product, id: form_id, class: 'flex flex-col gap-3', novalidate: 'novalidate', data-product-form: '' -%}
+    <input type="hidden" name="id" value="{{ variant.id }}" data-product-form-variant-id>
+
+    {%- if show_quantity -%}
+      <div class="flex items-center gap-3">
+        <label class="text-sm text-foreground/70" for="{{ form_id }}-quantity">
+          {{ 'products.product.quantity' | t: default: 'Quantity' }}
+        </label>
+        <div class="inline-flex items-center rounded-sm ring-1 ring-border ring-inset">
+          <button type="button" class="btn-icon size-9 rounded-sm" data-quantity-step="-1" aria-label="{{ 'products.product.decrease_quantity' | t: default: 'Decrease quantity' }}">
+            {%- render 'icon', name: 'minus', class: 'size-4' -%}
+          </button>
+          <input
+            type="number"
+            id="{{ form_id }}-quantity"
+            name="quantity"
+            value="1"
+            min="1"
+            inputmode="numeric"
+            class="w-12 border-0 bg-transparent text-center focus-visible:outline-none"
+            data-quantity-input
+          >
+          <button type="button" class="btn-icon size-9 rounded-sm" data-quantity-step="1" aria-label="{{ 'products.product.increase_quantity' | t: default: 'Increase quantity' }}">
+            {%- render 'icon', name: 'plus', class: 'size-4' -%}
+          </button>
+        </div>
+      </div>
+    {%- endif -%}
+
+    <button
+      type="submit"
+      class="btn-primary w-full"
+      {% if variant == blank or variant.available == false %}disabled{% endif %}
+      data-add-to-cart-button
+    >
+      <span data-add-to-cart-text>
+        {%- if variant == blank -%}
+          {{ 'products.product.unavailable' | t: default: 'Unavailable' }}
+        {%- elsif variant.available == false -%}
+          {{ 'products.product.sold_out' | t: default: 'Sold out' }}
+        {%- else -%}
+          {{ 'products.product.add_to_cart' | t: default: 'Add to cart' }}
+        {%- endif -%}
+      </span>
+    </button>
+
+    <p class="hidden text-sm text-sale" role="alert" data-form-error></p>
+  {%- endform -%}
+</product-form>

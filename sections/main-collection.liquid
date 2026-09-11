@@ -1,0 +1,102 @@
+{%- liquid
+  assign columns_desktop = section.settings.columns_desktop | default: '4'
+  assign grid_class = 'lg:grid-cols-4'
+  if columns_desktop == '3'
+    assign grid_class = 'lg:grid-cols-3'
+  endif
+-%}
+
+<div class="color-{{ section.settings.color_scheme }} bg-background text-foreground">
+  <div class="container-page section-y">
+    <div class="mb-8 flex flex-col gap-3 border-b border-border pb-8 md:mb-12 md:pb-10">
+      <h1 class="text-h1 font-heading font-bold">{{ collection.title }}</h1>
+      {%- if collection.description != blank -%}
+        <div class="max-w-2xl text-foreground/70">{{ collection.description }}</div>
+      {%- endif -%}
+    </div>
+
+    <div class="mb-6 flex items-center justify-between gap-4">
+      <p class="text-sm text-foreground/60">
+        {{ collection.products_count }} {{ 'sections.collection.products' | t: default: 'products' }}
+      </p>
+
+      <form action="{{ collection.url }}" method="get" class="flex items-center gap-2">
+        <label class="text-sm text-foreground/60" for="collection-sort-by">{{ 'sections.collection.sort_by' | t: default: 'Sort by' }}</label>
+        <select id="collection-sort-by" name="sort_by" class="input-field" onchange="this.form.submit()">
+          {%- for option in collection.sort_options -%}
+            <option value="{{ option.value }}" {% if option.value == collection.sort_by %}selected{% endif %}>{{ option.name }}</option>
+          {%- endfor -%}
+        </select>
+      </form>
+    </div>
+
+    {%- paginate collection.products by section.settings.products_per_page -%}
+      {%- if collection.products.size > 0 -%}
+        <div class="grid grid-cols-2 gap-x-4 gap-y-8 sm:gap-x-6 lg:gap-x-8 {{ grid_class }}">
+          {%- for product in collection.products -%}
+            {%- render 'product-card', product: product, section_id: section.id -%}
+          {%- endfor -%}
+        </div>
+      {%- else -%}
+        <div class="rounded-md border border-dashed border-border p-16 text-center text-foreground/60">
+          {{ 'sections.collection.empty' | t: default: 'No products found in this collection.' }}
+        </div>
+      {%- endif -%}
+
+      {%- if paginate.pages > 1 -%}
+        <nav class="mt-12 flex items-center justify-center gap-2" aria-label="{{ 'general.pagination.label' | t: default: 'Pagination' }}">
+          {%- if paginate.previous -%}
+            <a href="{{ paginate.previous.url }}" class="btn-icon" aria-label="{{ 'general.pagination.previous' | t: default: 'Previous page' }}">
+              {%- render 'icon', name: 'chevron-left', class: 'size-4' -%}
+            </a>
+          {%- endif -%}
+          {%- for part in paginate.parts -%}
+            {%- if part.is_link -%}
+              <a href="{{ part.url }}" class="btn-icon">{{ part.title }}</a>
+            {%- else -%}
+              <span class="btn-icon {% if part.title == paginate.current_page %}ring-1 ring-border{% endif %}">{{ part.title }}</span>
+            {%- endif -%}
+          {%- endfor -%}
+          {%- if paginate.next -%}
+            <a href="{{ paginate.next.url }}" class="btn-icon" aria-label="{{ 'general.pagination.next' | t: default: 'Next page' }}">
+              {%- render 'icon', name: 'chevron-right', class: 'size-4' -%}
+            </a>
+          {%- endif -%}
+        </nav>
+      {%- endif -%}
+    {%- endpaginate -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Collection pages",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "products_per_page",
+      "label": "Products per page",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "default": 16
+    },
+    {
+      "type": "select",
+      "id": "columns_desktop",
+      "label": "Columns on desktop",
+      "options": [
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" }
+      ],
+      "default": "4"
+    }
+  ]
+}
+{% endschema %}

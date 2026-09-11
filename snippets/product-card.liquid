@@ -1,0 +1,78 @@
+{%- comment -%}
+  A product card used by grids across the theme (featured
+  collection, collection page, search results).
+
+  Accepts:
+  - product: required.
+  - section_id: required, forwarded to product-form for unique ids.
+  - show_quick_add: optional boolean, default true.
+{%- endcomment -%}
+
+{%- liquid
+  assign show_quick_add = show_quick_add | default: true
+  assign featured_image = product.featured_media.preview_image
+  assign hover_image = product.media[1].preview_image
+  assign on_sale = false
+  if product.compare_at_price_max > product.price
+    assign on_sale = true
+  endif
+-%}
+
+<div class="product-card group flex flex-col gap-4">
+  <div class="relative overflow-hidden rounded-md bg-border/30">
+    <a href="{{ product.url }}" class="block aspect-portrait">
+      {%- if featured_image -%}
+        <img
+          src="{{ featured_image | image_url: width: 800 }}"
+          srcset="{{ featured_image | image_url: width: 400 }} 400w, {{ featured_image | image_url: width: 800 }} 800w, {{ featured_image | image_url: width: 1200 }} 1200w"
+          sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
+          alt="{{ featured_image.alt | default: product.title | escape }}"
+          width="{{ featured_image.width }}"
+          height="{{ featured_image.height }}"
+          loading="lazy"
+          class="absolute inset-0 size-full object-cover transition-opacity duration-300 {% if hover_image %}group-hover:opacity-0{% endif %}"
+        >
+        {%- if hover_image -%}
+          <img
+            src="{{ hover_image | image_url: width: 800 }}"
+            alt=""
+            width="{{ hover_image.width }}"
+            height="{{ hover_image.height }}"
+            loading="lazy"
+            aria-hidden="true"
+            class="absolute inset-0 size-full object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+          >
+        {%- endif -%}
+      {%- else -%}
+        {{ 'product-1' | placeholder_svg_tag: 'absolute inset-0 size-full object-cover text-foreground/20' }}
+      {%- endif -%}
+    </a>
+
+    <div class="pointer-events-none absolute inset-x-3 top-3 flex flex-wrap gap-2">
+      {%- if on_sale -%}
+        <span class="badge-sale pointer-events-auto">{{ 'products.product.on_sale' | t: default: 'Sale' }}</span>
+      {%- endif -%}
+      {%- unless product.available -%}
+        <span class="badge-neutral pointer-events-auto">{{ 'products.product.sold_out' | t: default: 'Sold out' }}</span>
+      {%- endunless -%}
+    </div>
+
+    {%- if show_quick_add and product.has_only_default_variant -%}
+      <div class="absolute inset-x-3 bottom-3 translate-y-2 opacity-0 transition-all duration-200 group-hover:translate-y-0 group-hover:opacity-100 focus-within:translate-y-0 focus-within:opacity-100">
+        {%- render 'product-form', product: product, section_id: section_id -%}
+      </div>
+    {%- endif -%}
+  </div>
+
+  <div class="flex flex-col gap-1">
+    {%- if product.vendor != blank -%}
+      <p class="text-xs text-foreground/60 uppercase tracking-wide">{{ product.vendor }}</p>
+    {%- endif -%}
+    <h3 class="text-base font-medium">
+      <a href="{{ product.url }}" class="line-clamp-2 transition-opacity hover:opacity-70">
+        {{ product.title }}
+      </a>
+    </h3>
+    {%- render 'price', target: product -%}
+  </div>
+</div>

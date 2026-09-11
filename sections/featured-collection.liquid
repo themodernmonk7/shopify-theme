@@ -1,0 +1,91 @@
+{%- liquid
+  assign collection = section.settings.collection
+  assign columns_desktop = section.settings.columns_desktop | default: 4
+-%}
+
+<section class="color-{{ section.settings.color_scheme }} bg-background text-foreground">
+  <div class="container-page section-y">
+    <div class="mb-8 flex flex-wrap items-end justify-between gap-4 md:mb-12">
+      <div class="flex flex-col gap-2">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="heading-eyebrow">{{ section.settings.eyebrow }}</p>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="text-h2 font-heading font-bold">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+      </div>
+      {%- if collection != blank -%}
+        <a href="{{ collection.url }}" class="link-underline shrink-0 text-sm font-medium">
+          {{ 'sections.featured_collection.view_all' | t: default: 'View all' }}
+        </a>
+      {%- endif -%}
+    </div>
+
+    {%- if collection != blank and collection.products.size > 0 -%}
+      <div class="grid grid-cols-2 gap-x-4 gap-y-8 sm:gap-x-6 lg:gap-x-8 {% if columns_desktop == '3' %}lg:grid-cols-3{% else %}lg:grid-cols-4{% endif %}">
+        {%- for product in collection.products limit: section.settings.products_to_show -%}
+          {%- render 'product-card', product: product, section_id: section.id -%}
+        {%- endfor -%}
+      </div>
+    {%- else -%}
+      <div class="rounded-md border border-dashed border-border p-12 text-center text-sm text-foreground/60">
+        {{ 'sections.featured_collection.no_collection' | t: default: 'Select a collection to display its products here.' }}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Featured collection",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Shop the collection"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Best sellers"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Products to show",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "select",
+      "id": "columns_desktop",
+      "label": "Columns on desktop",
+      "options": [
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" }
+      ],
+      "default": "4"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured collection"
+    }
+  ]
+}
+{% endschema %}

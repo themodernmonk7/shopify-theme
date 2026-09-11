@@ -1,0 +1,83 @@
+{
+  "general": {
+    "accessibility": {
+      "skip_to_content": "Skip to content"
+    },
+    "meta": {
+      "tags": "tagged",
+      "page": "Page"
+    },
+    "pagination": {
+      "label": "Pagination",
+      "previous": "Previous page",
+      "next": "Next page"
+    },
+    "search": {
+      "title": "Search",
+      "placeholder": "Search products",
+      "submit": "Search",
+      "results_for": "results for",
+      "no_results": "No results found for"
+    },
+    "404": {
+      "title": "Page not found",
+      "text": "The page you're looking for doesn't exist or has been moved.",
+      "link": "Return to homepage"
+    }
+  },
+  "newsletter": {
+    "email": "Email",
+    "placeholder": "Your email",
+    "submit": "Subscribe",
+    "success": "Thanks for subscribing!",
+    "error": "Please enter a valid email."
+  },
+  "footer": {
+    "rights_reserved": "All rights reserved."
+  },
+  "customer": {
+    "account": {
+      "title": "Account"
+    }
+  },
+  "products": {
+    "product": {
+      "add_to_cart": "Add to cart",
+      "sold_out": "Sold out",
+      "unavailable": "Unavailable",
+      "on_sale": "Sale",
+      "quantity": "Quantity",
+      "decrease_quantity": "Decrease quantity",
+      "increase_quantity": "Increase quantity",
+      "view_image": "View image"
+    }
+  },
+  "sections": {
+    "header": {
+      "menu": "Menu",
+      "mobile_menu": "Mobile menu",
+      "main_menu": "Main menu",
+      "cart_count": "Cart"
+    },
+    "cart": {
+      "title": "Cart",
+      "close": "Close cart",
+      "empty": "Your cart is empty",
+      "continue_shopping": "Continue shopping",
+      "subtotal": "Subtotal",
+      "taxes_and_shipping": "Taxes and shipping calculated at checkout",
+      "checkout": "Checkout",
+      "view_cart": "View cart",
+      "remove": "Remove"
+    },
+    "collection": {
+      "products": "products",
+      "sort_by": "Sort by",
+      "empty": "No products found in this collection."
+    },
+    "featured_collection": {
+      "view_all": "View all",
+      "no_collection": "Select a collection to display its products here."
+    }
+  }
+}

@@ -1,0 +1,116 @@
+{%- liquid
+  assign product = product
+  assign current_variant = product.selected_or_first_available_variant
+-%}
+
+<div class="color-{{ section.settings.color_scheme }} bg-background text-foreground">
+  <div class="container-page section-y">
+    <div class="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-16">
+      {%- comment -%} Gallery {%- endcomment -%}
+      <div class="flex flex-col gap-3">
+        {%- if product.media.size > 0 -%}
+          <div class="aspect-portrait overflow-hidden rounded-md bg-foreground/5">
+            <img
+              src="{{ current_variant.featured_media | default: product.featured_media | image_url: width: 1200 }}"
+              alt="{{ current_variant.featured_media.alt | default: product.featured_media.alt | escape }}"
+              width="1200"
+              height="1600"
+              class="size-full object-cover"
+              data-product-featured-image
+            >
+          </div>
+          {%- if product.media.size > 1 -%}
+            <div class="grid grid-cols-4 gap-3 sm:grid-cols-6">
+              {%- for media in product.media -%}
+                <button
+                  type="button"
+                  class="aspect-square overflow-hidden rounded-sm bg-foreground/5 ring-1 ring-border ring-inset transition-opacity hover:opacity-80"
+                  data-product-thumbnail
+                  data-media-src="{{ media | image_url: width: 1200 }}"
+                  aria-label="{{ 'products.product.view_image' | t: default: 'View image' }} {{ forloop.index }}"
+                >
+                  <img src="{{ media | image_url: width: 200 }}" alt="{{ media.alt | escape }}" width="120" height="120" loading="lazy" class="size-full object-cover">
+                </button>
+              {%- endfor -%}
+            </div>
+          {%- endif -%}
+        {%- else -%}
+          <div class="aspect-portrait overflow-hidden rounded-md bg-foreground/5">
+            {{ 'product-1' | placeholder_svg_tag: 'size-full object-cover text-foreground/20' }}
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} Product info {%- endcomment -%}
+      <div class="flex flex-col gap-5" data-product-info>
+        {%- if product.vendor != blank -%}
+          <p class="heading-eyebrow">{{ product.vendor }}</p>
+        {%- endif -%}
+        <h1 class="text-h1 font-heading font-bold">{{ product.title }}</h1>
+
+        <div data-product-price>
+          {%- render 'price', target: current_variant -%}
+        </div>
+
+        {%- if product.description != blank -%}
+          <div class="prose max-w-none text-sm text-foreground/70">{{ product.description }}</div>
+        {%- endif -%}
+
+        {%- unless product.has_only_default_variant -%}
+          <script type="application/json" data-product-variants-json>{{ product.variants | json }}</script>
+          <div class="flex flex-col gap-4" data-variant-picker data-section-id="{{ section.id }}" data-product-url="{{ product.url }}">
+            {%- for option in product.options_with_values -%}
+              <div class="flex flex-col gap-2">
+                <label class="text-sm font-medium" for="option-{{ forloop.index0 }}-{{ section.id }}">
+                  {{ option.name }}
+                </label>
+                <select id="option-{{ forloop.index0 }}-{{ section.id }}" class="input-field" data-option-index="{{ forloop.index0 }}" data-variant-option>
+                  {%- for value in option.values -%}
+                    <option value="{{ value | escape }}" {% if option.selected_value == value %}selected{% endif %}>{{ value }}</option>
+                  {%- endfor -%}
+                </select>
+              </div>
+            {%- endfor -%}
+          </div>
+        {%- endunless -%}
+
+        <div data-product-form-wrapper>
+          {%- render 'product-form', product: product, variant: current_variant, show_quantity: true, section_id: section.id -%}
+        </div>
+
+        {%- if section.settings.show_shipping_note -%}
+          <div class="flex items-center gap-2 text-sm text-foreground/60">
+            {%- render 'icon', name: 'truck', class: 'size-4' -%}
+            <span>{{ section.settings.shipping_note }}</span>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Product information",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_shipping_note",
+      "label": "Show shipping note",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "shipping_note",
+      "label": "Shipping note",
+      "default": "Free shipping on orders over $75"
+    }
+  ]
+}
+{% endschema %}

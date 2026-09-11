@@ -1,5 +1,204 @@
 [
   {
+    "name": "Favicon",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon image",
+        "info": "64 x 64px .png recommended"
+      }
+    ]
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Brand accents"
+      },
+      {
+        "type": "paragraph",
+        "content": "Used globally for badges, sale prices, focus states and success messages — independent of the color schemes below."
+      },
+      {
+        "type": "color",
+        "id": "accent_color",
+        "label": "Accent color",
+        "default": "#B5652C"
+      },
+      {
+        "type": "color",
+        "id": "sale_color",
+        "label": "Sale price color",
+        "default": "#C6432B"
+      },
+      {
+        "type": "color",
+        "id": "success_color",
+        "label": "Success color",
+        "default": "#2E7D46"
+      },
+      {
+        "type": "header",
+        "content": "Color schemes"
+      },
+      {
+        "type": "paragraph",
+        "content": "Reusable palettes. Every section picks one of these schemes, so changing a scheme here updates every section that uses it, instantly."
+      },
+      {
+        "type": "color_scheme_group",
+        "id": "color_schemes",
+        "definition": [
+          {
+            "type": "color",
+            "id": "background",
+            "label": "Background",
+            "default": "#FFFFFF"
+          },
+          {
+            "type": "color_background",
+            "id": "background_gradient",
+            "label": "Background gradient"
+          },
+          {
+            "type": "color",
+            "id": "text",
+            "label": "Text",
+            "default": "#1A1A1A"
+          },
+          {
+            "type": "color",
+            "id": "border",
+            "label": "Border",
+            "default": "#E5E2DA"
+          },
+          {
+            "type": "color",
+            "id": "primary_button",
+            "label": "Primary button background",
+            "default": "#1A1A1A"
+          },
+          {
+            "type": "color",
+            "id": "primary_button_text",
+            "label": "Primary button text",
+            "default": "#FFFFFF"
+          },
+          {
+            "type": "color",
+            "id": "secondary_button",
+            "label": "Secondary button background",
+            "default": "#FFFFFF"
+          },
+          {
+            "type": "color",
+            "id": "secondary_button_text",
+            "label": "Secondary button text",
+            "default": "#1A1A1A"
+          },
+          {
+            "type": "color",
+            "id": "link",
+            "label": "Links",
+            "default": "#1A1A1A"
+          }
+        ],
+        "role": {
+          "text": "text",
+          "background": {
+            "solid": "background",
+            "gradient": "background_gradient"
+          },
+          "links": "link",
+          "icons": "text",
+          "primary_button": "primary_button",
+          "on_primary_button": "primary_button_text",
+          "primary_button_border": "primary_button",
+          "secondary_button": "secondary_button",
+          "on_secondary_button": "secondary_button_text",
+          "secondary_button_border": "border"
+        }
+      }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Body"
+      },
+      {
+        "type": "font_picker",
+        "id": "body_font",
+        "label": "Body font",
+        "default": "inter_n4"
+      },
+      {
+        "type": "range",
+        "id": "body_scale",
+        "min": 90,
+        "max": 130,
+        "step": 5,
+        "unit": "%",
+        "label": "Body text size",
+        "default": 100
+      },
+      {
+        "type": "header",
+        "content": "Headings"
+      },
+      {
+        "type": "font_picker",
+        "id": "heading_font",
+        "label": "Heading font",
+        "default": "poppins_n7"
+      },
+      {
+        "type": "range",
+        "id": "heading_scale",
+        "min": 90,
+        "max": 150,
+        "step": 5,
+        "unit": "%",
+        "label": "Heading text size",
+        "default": 100
+      }
+    ]
+  },
+  {
+    "name": "Style",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Shape"
+      },
+      {
+        "type": "range",
+        "id": "radius_base",
+        "min": 0,
+        "max": 24,
+        "step": 2,
+        "unit": "px",
+        "label": "Corner radius",
+        "default": 8,
+        "info": "Drives the radius of buttons, cards, inputs and images throughout the theme."
+      },
+      {
+        "type": "header",
+        "content": "Elevation"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_card_shadow",
+        "label": "Use shadows on cards",
+        "default": true
+      }
+    ]
+  },
+  {
     "name": "Layout",
     "settings": [
       {
@@ -11,10 +210,10 @@
         "id": "page_width",
         "label": "Page width",
         "min": 1000,
-        "max": 2000,
-        "step": 40,
+        "max": 1600,
+        "step": 20,
         "unit": "px",
-        "default": 1000
+        "default": 1280
       },
       {
         "type": "header",
@@ -23,9 +222,9 @@
       {
         "type": "range",
         "id": "page_padding",
-        "label": "Page padding mobile",
-        "min": 0,
-        "max": 50,
+        "label": "Page padding (mobile)",
+        "min": 12,
+        "max": 40,
         "step": 2,
         "unit": "px",
         "default": 16
@@ -33,29 +232,76 @@
       {
         "type": "range",
         "id": "page_padding_desktop",
-        "label": "Page padding desktop",
-        "min": 0,
+        "label": "Page padding (desktop)",
+        "min": 16,
         "max": 100,
-        "step": 2,
+        "step": 4,
         "unit": "px",
-        "default": 80
+        "default": 48
+      },
+      {
+        "type": "header",
+        "content": "Spacing"
+      },
+      {
+        "type": "range",
+        "id": "section_spacing",
+        "label": "Space between sections",
+        "min": 24,
+        "max": 120,
+        "step": 4,
+        "unit": "px",
+        "default": 64
       }
     ]
   },
   {
-    "name": "Typography",
+    "name": "Cart",
     "settings": [
       {
-        "type": "font_picker",
-        "id": "body_font",
-        "label": "Body font",
-        "default": "inter_n4"
+        "type": "select",
+        "id": "cart_type",
+        "label": "Cart type",
+        "options": [
+          { "value": "drawer", "label": "Drawer" },
+          { "value": "page", "label": "Page" }
+        ],
+        "default": "drawer"
+      }
+    ]
+  },
+  {
+    "name": "Social media",
+    "settings": [
+      {
+        "type": "text",
+        "id": "social_instagram",
+        "label": "Instagram URL"
       },
       {
-        "type": "font_picker",
-        "id": "heading_font",
-        "label": "Heading font",
-        "default": "poppins_n7"
+        "type": "text",
+        "id": "social_facebook",
+        "label": "Facebook URL"
+      },
+      {
+        "type": "text",
+        "id": "social_tiktok",
+        "label": "TikTok URL"
+      },
+      {
+        "type": "text",
+        "id": "social_youtube",
+        "label": "YouTube URL"
+      },
+      {
+        "type": "text",
+        "id": "social_x",
+        "label": "X (Twitter) URL"
+      },
+      {
+        "type": "text",
+        "id": "social_pinterest",
+        "label": "Pinterest URL"
       }
     ]
   }

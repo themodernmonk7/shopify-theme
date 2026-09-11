@@ -2,10 +2,27 @@
   "name": "Footer group",
   "type": "footer",
   "sections": {
-    "main": {
+    "footer": {
       "type": "footer",
+      "blocks": {
+        "menu": {
+          "type": "menu",
+          "settings": {
+            "heading": "Shop",
+            "menu": "footer"
+          }
+        },
+        "newsletter": {
+          "type": "newsletter",
+          "settings": {
+            "heading": "Stay in the loop",
+            "text": "Get product news and offers straight to your inbox."
+          }
+        }
+      },
+      "block_order": ["menu", "newsletter"],
       "settings": {}
     }
   },
-  "order": ["main"]
+  "order": ["footer"]
 }

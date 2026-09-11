@@ -1,0 +1,34 @@
+{%- comment -%}
+  Renders a price, with a struck-through compare-at price and a
+  "Sale" badge when applicable.
+
+  Accepts:
+  - target: required. A product or variant object that responds to
+    `price`, `compare_at_price` and `available`.
+  - class: optional. Extra classes on the wrapper.
+{%- endcomment -%}
+
+{%- liquid
+  assign target = target
+  assign compare_at_price = target.compare_at_price
+  assign price = target.price
+  assign available = target.available | default: true
+  assign on_sale = false
+  if compare_at_price > price
+    assign on_sale = true
+  endif
+-%}
+
+<div class="price flex flex-wrap items-baseline gap-x-2 {{ class }}">
+  {%- if on_sale -%}
+    <span class="text-sale font-semibold">{{ price | money }}</span>
+    <span class="text-foreground/50 line-through text-sm">{{ compare_at_price | money }}</span>
+    <span class="visually-hidden">{{ 'products.product.on_sale' | t: default: 'Sale price' }}</span>
+  {%- else -%}
+    <span class="font-semibold">{{ price | money }}</span>
+  {%- endif -%}
+
+  {%- unless available -%}
+    <span class="text-foreground/60 text-sm">{{ 'products.product.sold_out' | t: default: 'Sold out' }}</span>
+  {%- endunless -%}
+</div>

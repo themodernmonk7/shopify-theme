@@ -1,0 +1,46 @@
+<div class="color-{{ section.settings.color_scheme }} bg-background text-foreground">
+  <div class="container-page section-y">
+    <h1 class="mb-8 text-h1 font-heading font-bold md:mb-12">{{ 'sections.cart.title' | t: default: 'Cart' }}</h1>
+
+    {%- if cart.item_count == 0 -%}
+      <div class="flex flex-col items-center gap-4 rounded-md border border-dashed border-border p-16 text-center">
+        {%- render 'icon', name: 'cart', class: 'size-10 text-foreground/30' -%}
+        <p class="text-foreground/60">{{ 'sections.cart.empty' | t: default: 'Your cart is empty' }}</p>
+        <a href="{{ routes.all_products_collection_url }}" class="btn-primary">
+          {{ 'sections.cart.continue_shopping' | t: default: 'Continue shopping' }}
+        </a>
+      </div>
+    {%- else -%}
+      {%- form 'cart', cart, class: 'grid grid-cols-1 gap-10 lg:grid-cols-3 lg:gap-16' -%}
+        <div class="lg:col-span-2">
+          {%- render 'cart-items', cart: cart, compact: false -%}
+        </div>
+
+        <div class="flex h-fit flex-col gap-4 rounded-md border border-border p-6 lg:col-span-1">
+          <div class="flex items-center justify-between">
+            <span class="text-foreground/70">{{ 'sections.cart.subtotal' | t: default: 'Subtotal' }}</span>
+            <span class="text-lg font-semibold">{{ cart.total_price | money }}</span>
+          </div>
+          <p class="text-xs text-foreground/60">{{ 'sections.cart.taxes_and_shipping' | t: default: 'Taxes and shipping calculated at checkout' }}</p>
+          <button type="submit" name="checkout" class="btn-primary w-full">
+            {{ 'sections.cart.checkout' | t: default: 'Checkout' }}
+          </button>
+        </div>
+      {%- endform -%}
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Cart page",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    }
+  ]
+}
+{% endschema %}

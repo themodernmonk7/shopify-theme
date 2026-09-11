@@ -2,14 +2,23 @@
   "name": "Header group",
   "type": "header",
   "sections": {
-    "main": {
-      "type": "header",
-      "settings": {}
-    },
     "announcement-bar": {
       "type": "announcement-bar",
+      "blocks": {
+        "announcement-1": {
+          "type": "announcement",
+          "settings": {
+            "text": "Free shipping on orders over $75"
+          }
+        }
+      },
+      "block_order": ["announcement-1"],
+      "settings": {}
+    },
+    "header": {
+      "type": "header",
       "settings": {}
     }
   },
-  "order": ["announcement-bar", "main"]
+  "order": ["announcement-bar", "header"]
 }

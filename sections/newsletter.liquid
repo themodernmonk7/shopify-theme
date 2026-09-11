@@ -1,0 +1,63 @@
+<section class="color-{{ section.settings.color_scheme }} bg-background text-foreground">
+  <div class="container-page section-y">
+    <div class="mx-auto flex max-w-lg flex-col items-center gap-4 text-center">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="text-h2 font-heading font-bold">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.text != blank -%}
+        <p class="text-foreground/70">{{ section.settings.text }}</p>
+      {%- endif -%}
+
+      {%- form 'customer', id: 'newsletter-form', class: 'mt-2 flex w-full max-w-sm flex-col gap-3 sm:flex-row' -%}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        <label class="visually-hidden" for="newsletter-form-email">{{ 'newsletter.email' | t: default: 'Email' }}</label>
+        <input
+          type="email"
+          name="contact[email]"
+          id="newsletter-form-email"
+          required
+          placeholder="{{ 'newsletter.placeholder' | t: default: 'Your email' }}"
+          class="input-field"
+        >
+        <button type="submit" class="btn-primary shrink-0">{{ 'newsletter.submit' | t: default: 'Subscribe' }}</button>
+
+        {%- if form.posted_successfully? -%}
+          <p class="w-full text-sm text-success" role="status">{{ 'newsletter.success' | t: default: 'Thanks for subscribing!' }}</p>
+        {%- elsif form.errors -%}
+          <p class="w-full text-sm text-sale" role="alert">{{ 'newsletter.error' | t: default: 'Please enter a valid email.' }}</p>
+        {%- endif -%}
+      {%- endform -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Newsletter",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-3"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Join the list"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text",
+      "default": "Be the first to know about new arrivals, exclusive offers and more."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter"
+    }
+  ]
+}
+{% endschema %}

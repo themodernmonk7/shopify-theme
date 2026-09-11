@@ -1,3 +1,156 @@
-<p class="bg-red-300">
-    This is footer
-</p>
+<footer class="color-{{ section.settings.color_scheme }} border-t border-border bg-background text-foreground">
+  <div class="container-page section-y">
+    <div class="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-5">
+      <div class="flex flex-col gap-4 lg:col-span-2">
+        <a href="{{ routes.root_url }}" class="text-h3 font-heading font-bold">{{ shop.name }}</a>
+        {%- if section.settings.about_text != blank -%}
+          <div class="max-w-sm text-sm text-foreground/70">{{ section.settings.about_text }}</div>
+        {%- endif -%}
+
+        {%- liquid
+          assign has_social = false
+          if settings.social_instagram != blank or settings.social_facebook != blank or settings.social_tiktok != blank or settings.social_youtube != blank or settings.social_x != blank or settings.social_pinterest != blank
+            assign has_social = true
+          endif
+        -%}
+        {%- if has_social -%}
+          <div class="flex items-center gap-1">
+            {%- if settings.social_instagram != blank -%}
+              <a href="{{ settings.social_instagram }}" class="btn-icon" aria-label="Instagram">{% render 'icon', name: 'instagram', class: 'size-4.5' %}</a>
+            {%- endif -%}
+            {%- if settings.social_facebook != blank -%}
+              <a href="{{ settings.social_facebook }}" class="btn-icon" aria-label="Facebook">{% render 'icon', name: 'facebook', class: 'size-4.5' %}</a>
+            {%- endif -%}
+            {%- if settings.social_tiktok != blank -%}
+              <a href="{{ settings.social_tiktok }}" class="btn-icon" aria-label="TikTok">{% render 'icon', name: 'tiktok', class: 'size-4.5' %}</a>
+            {%- endif -%}
+            {%- if settings.social_youtube != blank -%}
+              <a href="{{ settings.social_youtube }}" class="btn-icon" aria-label="YouTube">{% render 'icon', name: 'youtube', class: 'size-4.5' %}</a>
+            {%- endif -%}
+            {%- if settings.social_x != blank -%}
+              <a href="{{ settings.social_x }}" class="btn-icon" aria-label="X">{% render 'icon', name: 'x-social', class: 'size-4.5' %}</a>
+            {%- endif -%}
+            {%- if settings.social_pinterest != blank -%}
+              <a href="{{ settings.social_pinterest }}" class="btn-icon" aria-label="Pinterest">{% render 'icon', name: 'pinterest', class: 'size-4.5' %}</a>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when 'menu' -%}
+            <div {{ block.shopify_attributes }}>
+              {%- if block.settings.heading != blank -%}
+                <h3 class="mb-4 text-sm font-semibold">{{ block.settings.heading }}</h3>
+              {%- endif -%}
+              <ul class="flex flex-col gap-3">
+                {%- for link in block.settings.menu.links -%}
+                  <li><a href="{{ link.url }}" class="text-sm text-foreground/70 transition-opacity hover:opacity-100">{{ link.title }}</a></li>
+                {%- endfor -%}
+              </ul>
+            </div>
+
+          {%- when 'newsletter' -%}
+            <div {{ block.shopify_attributes }}>
+              {%- if block.settings.heading != blank -%}
+                <h3 class="mb-2 text-sm font-semibold">{{ block.settings.heading }}</h3>
+              {%- endif -%}
+              {%- if block.settings.text != blank -%}
+                <p class="mb-4 text-sm text-foreground/70">{{ block.settings.text }}</p>
+              {%- endif -%}
+              {%- form 'customer', id: 'footer-newsletter-form', class: 'flex gap-2' -%}
+                <input type="hidden" name="contact[tags]" value="newsletter">
+                <label class="visually-hidden" for="footer-newsletter-email">{{ 'newsletter.email' | t: default: 'Email' }}</label>
+                <input
+                  type="email"
+                  name="contact[email]"
+                  id="footer-newsletter-email"
+                  required
+                  placeholder="{{ 'newsletter.placeholder' | t: default: 'Your email' }}"
+                  class="input-field"
+                >
+                <button type="submit" class="btn-icon shrink-0 ring-1 ring-border ring-inset" aria-label="{{ 'newsletter.submit' | t: default: 'Subscribe' }}">
+                  {%- render 'icon', name: 'arrow-right', class: 'size-4' -%}
+                </button>
+                {%- if form.posted_successfully? -%}
+                  <p class="text-sm text-success" role="status">{{ 'newsletter.success' | t: default: 'Thanks for subscribing!' }}</p>
+                {%- endif -%}
+              {%- endform -%}
+            </div>
+        {%- endcase -%}
+      {%- endfor -%}
+    </div>
+
+    <div class="mt-12 flex flex-col-reverse items-center justify-between gap-4 border-t border-border pt-6 text-xs text-foreground/60 md:flex-row">
+      <p>&copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. {{ 'footer.rights_reserved' | t: default: 'All rights reserved.' }}</p>
+
+      {%- if shop.enabled_payment_types.size > 0 -%}
+        <div class="flex flex-wrap items-center gap-2">
+          {%- for type in shop.enabled_payment_types -%}
+            {{ type | payment_type_svg_tag: class: 'h-6 w-auto' }}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-2"
+    },
+    {
+      "type": "textarea",
+      "id": "about_text",
+      "label": "About text",
+      "default": "Thoughtfully made goods, shipped worldwide."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "menu",
+      "name": "Menu",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Shop"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Menu",
+          "default": "footer"
+        }
+      ]
+    },
+    {
+      "type": "newsletter",
+      "name": "Newsletter",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Stay in the loop"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Get product news and offers straight to your inbox."
+        }
+      ]
+    }
+  ],
+  "max_blocks": 6
+}
+{% endschema %}

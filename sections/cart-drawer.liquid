@@ -1,0 +1,79 @@
+{%- comment -%}
+  Rendered once in layout/theme.liquid so it is present (and
+  addressable via the Ajax Cart API's `sections` param) on every
+  page, regardless of which template is showing.
+{%- endcomment -%}
+
+<div
+  id="cart-drawer"
+  class="color-{{ section.settings.color_scheme }} fixed inset-0 z-50 hidden"
+  data-cart-drawer
+  aria-hidden="true"
+>
+  <div class="absolute inset-0 bg-foreground/40" data-cart-drawer-overlay></div>
+
+  <aside
+    class="absolute inset-y-0 right-0 flex w-full max-w-md translate-x-full flex-col bg-background text-foreground shadow-drawer transition-transform duration-300"
+    data-cart-drawer-panel
+    role="dialog"
+    aria-modal="true"
+    aria-label="{{ 'sections.cart.title' | t: default: 'Cart' }}"
+  >
+    <div class="flex items-center justify-between border-b border-border p-4">
+      <h2 class="text-lg font-semibold">
+        {{ 'sections.cart.title' | t: default: 'Cart' }}
+        {%- if cart.item_count > 0 %} ({{ cart.item_count }}){% endif -%}
+      </h2>
+      <button type="button" class="btn-icon" data-cart-drawer-close aria-label="{{ 'sections.cart.close' | t: default: 'Close cart' }}">
+        {%- render 'icon', name: 'close', class: 'size-5' -%}
+      </button>
+    </div>
+
+    {%- if cart.item_count == 0 -%}
+      <div class="flex flex-1 flex-col items-center justify-center gap-4 p-8 text-center">
+        {%- render 'icon', name: 'cart', class: 'size-10 text-foreground/30' -%}
+        <p class="text-foreground/60">{{ 'sections.cart.empty' | t: default: 'Your cart is empty' }}</p>
+        <button type="button" class="btn-secondary" data-cart-drawer-close>
+          {{ 'sections.cart.continue_shopping' | t: default: 'Continue shopping' }}
+        </button>
+      </div>
+    {%- else -%}
+      {%- form 'cart', cart, class: 'flex flex-1 flex-col overflow-hidden' -%}
+        <div class="flex-1 overflow-y-auto px-4">
+          {%- render 'cart-items', cart: cart, compact: true -%}
+        </div>
+
+        <div class="flex flex-col gap-3 border-t border-border p-4">
+          <div class="flex items-center justify-between text-sm">
+            <span class="text-foreground/70">{{ 'sections.cart.subtotal' | t: default: 'Subtotal' }}</span>
+            <span class="text-base font-semibold">{{ cart.total_price | money }}</span>
+          </div>
+          <p class="text-xs text-foreground/60">{{ 'sections.cart.taxes_and_shipping' | t: default: 'Taxes and shipping calculated at checkout' }}</p>
+
+          <div class="mt-1 flex flex-col gap-2">
+            <button type="submit" name="checkout" class="btn-primary w-full">
+              {{ 'sections.cart.checkout' | t: default: 'Checkout' }}
+            </button>
+            <a href="{{ routes.cart_url }}" class="btn-secondary w-full">
+              {{ 'sections.cart.view_cart' | t: default: 'View cart' }}
+            </a>
+          </div>
+        </div>
+      {%- endform -%}
+    {%- endif -%}
+  </aside>
+</div>
+
+{% schema %}
+{
+  "name": "Cart drawer",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    }
+  ]
+}
+{% endschema %}

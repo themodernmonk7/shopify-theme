@@ -1,22 +1,54 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
-    "main": {
-      "type": "header",
-      "settings": {}
-    },
     "hero-banner": {
       "type": "hero-banner",
       "settings": {}
+    },
+    "value-props": {
+      "type": "value-props",
+      "blocks": {
+        "shipping": {
+          "type": "value_prop",
+          "settings": { "icon": "truck", "heading": "Free shipping", "text": "On all orders over $75" }
+        },
+        "returns": {
+          "type": "value_prop",
+          "settings": { "icon": "refresh", "heading": "Easy returns", "text": "30-day return policy" }
+        },
+        "security": {
+          "type": "value_prop",
+          "settings": { "icon": "shield-check", "heading": "Secure checkout", "text": "128-bit SSL encryption" }
+        },
+        "support": {
+          "type": "value_prop",
+          "settings": { "icon": "headset", "heading": "24/7 support", "text": "Here whenever you need us" }
+        }
+      },
+      "block_order": ["shipping", "returns", "security", "support"],
+      "settings": {}
+    },
+    "featured-collection": {
+      "type": "featured-collection",
+      "settings": {}
+    },
+    "image-with-text": {
+      "type": "image-with-text",
+      "settings": {}
+    },
+    "testimonials": {
+      "type": "testimonials",
+      "blocks": {
+        "testimonial-1": { "type": "testimonial", "settings": {} },
+        "testimonial-2": { "type": "testimonial", "settings": {} },
+        "testimonial-3": { "type": "testimonial", "settings": {} }
+      },
+      "block_order": ["testimonial-1", "testimonial-2", "testimonial-3"],
+      "settings": {}
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "settings": {}
     }
   },
-  "order": ["main", "hero-banner"]
+  "order": ["hero-banner", "value-props", "featured-collection", "image-with-text", "testimonials", "newsletter"]
 }

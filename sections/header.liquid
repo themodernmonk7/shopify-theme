@@ -1,1 +1,152 @@
-<h1> {{ shop.address }} </h1>
+{%- liquid
+  assign menu = section.settings.menu
+-%}
+
+<header class="color-{{ section.settings.color_scheme }} relative z-40 border-b border-border bg-background text-foreground">
+  <div class="container-page flex h-16 items-center justify-between gap-4 md:h-20">
+    {%- comment -%} Mobile menu trigger {%- endcomment -%}
+    <details class="group relative lg:hidden" data-mobile-menu>
+      <summary class="btn-icon" aria-label="{{ 'sections.header.menu' | t: default: 'Menu' }}">
+        {%- render 'icon', name: 'menu', class: 'size-5 group-open:hidden' -%}
+        {%- render 'icon', name: 'close', class: 'hidden size-5 group-open:block' -%}
+      </summary>
+
+      <div class="fixed inset-0 top-16 z-40 overflow-y-auto bg-background p-6">
+        <nav aria-label="{{ 'sections.header.mobile_menu' | t: default: 'Mobile menu' }}">
+          <ul class="flex flex-col divide-y divide-border">
+            {%- for link in menu.links -%}
+              <li>
+                <a href="{{ link.url }}" class="flex items-center justify-between py-4 text-lg font-medium">
+                  {{ link.title }}
+                  {%- if link.links != blank -%}
+                    {%- render 'icon', name: 'chevron-right', class: 'size-4' -%}
+                  {%- endif -%}
+                </a>
+                {%- if link.links != blank -%}
+                  <ul class="flex flex-col gap-1 pb-4 pl-4">
+                    {%- for child_link in link.links -%}
+                      <li>
+                        <a href="{{ child_link.url }}" class="block py-2 text-foreground/70">{{ child_link.title }}</a>
+                      </li>
+                    {%- endfor -%}
+                  </ul>
+                {%- endif -%}
+              </li>
+            {%- endfor -%}
+          </ul>
+        </nav>
+      </div>
+    </details>
+
+    {%- comment -%} Logo {%- endcomment -%}
+    <a href="{{ routes.root_url }}" class="shrink-0 text-h3 font-heading font-bold">
+      {%- if section.settings.logo != blank -%}
+        <img
+          src="{{ section.settings.logo | image_url: width: 320 }}"
+          alt="{{ shop.name }}"
+          width="{{ section.settings.logo.width }}"
+          height="{{ section.settings.logo.height }}"
+          class="h-8 w-auto object-contain md:h-9"
+        >
+      {%- else -%}
+        {{ shop.name }}
+      {%- endif -%}
+    </a>
+
+    {%- comment -%} Desktop navigation {%- endcomment -%}
+    <nav class="hidden lg:block" aria-label="{{ 'sections.header.main_menu' | t: default: 'Main menu' }}">
+      <ul class="flex items-center gap-8">
+        {%- for link in menu.links -%}
+          <li class="group relative">
+            <a href="{{ link.url }}" class="flex items-center gap-1 py-2 text-sm font-medium transition-opacity hover:opacity-70">
+              {{ link.title }}
+              {%- if link.links != blank -%}
+                {%- render 'icon', name: 'chevron-down', class: 'size-3.5' -%}
+              {%- endif -%}
+            </a>
+            {%- if link.links != blank -%}
+              <div class="invisible absolute left-0 top-full z-10 min-w-48 -translate-y-1 rounded-md border border-border bg-background p-2 opacity-0 shadow-dropdown transition-all duration-150 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
+                <ul class="flex flex-col">
+                  {%- for child_link in link.links -%}
+                    <li>
+                      <a href="{{ child_link.url }}" class="block rounded-sm px-3 py-2 text-sm transition-colors hover:bg-foreground/5">{{ child_link.title }}</a>
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              </div>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    </nav>
+
+    {%- comment -%} Utility icons {%- endcomment -%}
+    <div class="flex shrink-0 items-center gap-1">
+      <details class="group relative" data-search>
+        <summary class="btn-icon" aria-label="{{ 'general.search.title' | t: default: 'Search' }}">
+          {%- render 'icon', name: 'search', class: 'size-5' -%}
+        </summary>
+        <div class="fixed inset-x-0 top-16 z-40 border-b border-border bg-background p-4 shadow-dropdown md:absolute md:inset-x-auto md:top-full md:right-0 md:mt-2 md:w-96 md:rounded-md md:border">
+          <form action="{{ routes.search_url }}" method="get" role="search" class="flex items-center gap-2">
+            <input
+              type="search"
+              name="q"
+              value="{{ search.terms | escape }}"
+              placeholder="{{ 'general.search.placeholder' | t: default: 'Search products' }}"
+              class="input-field"
+              autofocus
+            >
+            <input type="hidden" name="type" value="product">
+            <button type="submit" class="btn-icon shrink-0" aria-label="{{ 'general.search.submit' | t: default: 'Submit search' }}">
+              {%- render 'icon', name: 'search', class: 'size-5' -%}
+            </button>
+          </form>
+        </div>
+      </details>
+
+      <a href="{{ routes.account_url }}" class="btn-icon" aria-label="{{ 'customer.account.title' | t: default: 'Account' }}">
+        {%- render 'icon', name: 'account', class: 'size-5' -%}
+      </a>
+
+      <a
+        href="{{ routes.cart_url }}"
+        class="btn-icon relative"
+        aria-label="{{ 'sections.header.cart_count' | t: default: 'Cart' }}"
+        {% if settings.cart_type == 'drawer' %}data-cart-drawer-open{% endif %}
+      >
+        {%- render 'icon', name: 'cart', class: 'size-5' -%}
+        <span
+          class="absolute -top-1 -right-1 flex size-4 items-center justify-center rounded-full bg-accent text-xs font-bold text-background {% if cart.item_count == 0 %}hidden{% endif %}"
+          data-cart-count
+        >
+          {{- cart.item_count -}}
+        </span>
+      </a>
+    </div>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    }
+  ]
+}
+{% endschema %}

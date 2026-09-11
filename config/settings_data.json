@@ -1,18 +1,68 @@
 {
-  "current": {
-    "page_width": 1000,
-    "page_padding": 16,
-    "page_padding_desktop": 80,
-    "body_font": "inter_n4",
-    "heading_font": "poppins_n7"
-  },
+  "current": "Default",
   "presets": {
     "Default": {
-      "page_width": 1000,
-      "page_padding": 16,
-      "page_padding_desktop": 80,
+      "accent_color": "#B5652C",
+      "sale_color": "#C6432B",
+      "success_color": "#2E7D46",
+      "color_schemes": {
+        "scheme-1": {
+          "settings": {
+            "background": "#FFFFFF",
+            "background_gradient": "",
+            "text": "#1A1A1A",
+            "border": "#E5E2DA",
+            "primary_button": "#1A1A1A",
+            "primary_button_text": "#FFFFFF",
+            "secondary_button": "#FFFFFF",
+            "secondary_button_text": "#1A1A1A",
+            "link": "#1A1A1A"
+          }
+        },
+        "scheme-2": {
+          "settings": {
+            "background": "#1A1A1A",
+            "background_gradient": "",
+            "text": "#FAF9F6",
+            "border": "#3D3B36",
+            "primary_button": "#FAF9F6",
+            "primary_button_text": "#1A1A1A",
+            "secondary_button": "#1A1A1A",
+            "secondary_button_text": "#FAF9F6",
+            "link": "#FAF9F6"
+          }
+        },
+        "scheme-3": {
+          "settings": {
+            "background": "#F4F1EA",
+            "background_gradient": "",
+            "text": "#1A1A1A",
+            "border": "#DFD9C8",
+            "primary_button": "#B5652C",
+            "primary_button_text": "#FFFFFF",
+            "secondary_button": "#FFFFFF",
+            "secondary_button_text": "#1A1A1A",
+            "link": "#B5652C"
+          }
+        }
+      },
       "body_font": "inter_n4",
-      "heading_font": "poppins_n7"
+      "body_scale": 100,
+      "heading_font": "poppins_n7",
+      "heading_scale": 100,
+      "radius_base": 8,
+      "enable_card_shadow": true,
+      "page_width": 1280,
+      "page_padding": 16,
+      "page_padding_desktop": 48,
+      "section_spacing": 64,
+      "cart_type": "drawer",
+      "social_instagram": "",
+      "social_facebook": "",
+      "social_tiktok": "",
+      "social_youtube": "",
+      "social_x": "",
+      "social_pinterest": ""
     }
   }
 }

@@ -1,0 +1,83 @@
+/**
+ * Component classes
+ * ------------------------------------------------------------
+ * Small, reusable classes composed entirely from token-backed
+ * Tailwind utilities (`@apply`) or CSS custom properties — never
+ * a raw color, px or rem value. Kept here instead of repeating
+ * the same long utility string across dozens of Liquid files.
+ *
+ * No arbitrary `[...]` Tailwind values are used anywhere in this
+ * theme; every size, color and radius traces back to a token in
+ * tokens.css or theme-variables.liquid.
+ *
+ * Note: Tailwind's `@apply` can only reference core utilities, so
+ * each button/badge variant restates its shared base rather than
+ * `@apply`-ing another custom class — combine `.btn` with a
+ * modifier in markup where you want the shared base only.
+ */
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-sm px-6 py-3 text-sm font-semibold whitespace-nowrap transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-50 active:not-disabled:scale-95;
+  }
+
+  .btn-sm {
+    @apply px-4 py-2 text-xs;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-sm bg-button px-6 py-3 text-sm font-semibold whitespace-nowrap text-button-foreground transition-all duration-200 hover:not-disabled:opacity-90 disabled:cursor-not-allowed disabled:opacity-50 active:not-disabled:scale-95;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-sm bg-button-secondary px-6 py-3 text-sm font-semibold whitespace-nowrap text-button-secondary-foreground ring-1 ring-border ring-inset transition-all duration-200 hover:not-disabled:bg-border/40 disabled:cursor-not-allowed disabled:opacity-50 active:not-disabled:scale-95;
+  }
+
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 rounded-sm bg-transparent px-6 py-3 text-sm font-semibold whitespace-nowrap text-foreground ring-1 ring-border ring-inset transition-all duration-200 hover:not-disabled:bg-foreground hover:not-disabled:text-background disabled:cursor-not-allowed disabled:opacity-50 active:not-disabled:scale-95;
+  }
+
+  .btn-icon {
+    @apply inline-flex size-10 items-center justify-center rounded-full transition-colors duration-200 hover:bg-foreground/5;
+  }
+
+  .input-field {
+    @apply w-full rounded-sm border border-border bg-background px-4 py-2.5 text-foreground placeholder:text-foreground/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-offset-1;
+  }
+
+  .card {
+    @apply rounded-md border border-border bg-background;
+  }
+
+  .card-elevated {
+    @apply rounded-md border border-transparent bg-background shadow-card;
+  }
+
+  .badge {
+    @apply inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold leading-none;
+  }
+
+  .badge-sale {
+    @apply inline-flex items-center rounded-full bg-sale px-2.5 py-1 text-xs font-semibold leading-none text-background;
+  }
+
+  .badge-neutral {
+    @apply inline-flex items-center rounded-full bg-foreground px-2.5 py-1 text-xs font-semibold leading-none text-background;
+  }
+
+  .heading-eyebrow {
+    @apply text-xs font-semibold tracking-widest text-foreground/60 uppercase;
+  }
+
+  .link-underline {
+    @apply text-link underline decoration-1 underline-offset-4 transition-opacity duration-200 hover:opacity-70;
+  }
+
+  .container-page {
+    @apply mx-auto w-full max-w-page px-page-x md:px-page-x-lg;
+  }
+
+  .section-y {
+    @apply py-section-y-sm md:py-section-y;
+  }
+}

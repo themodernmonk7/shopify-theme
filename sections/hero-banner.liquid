@@ -1,17 +1,138 @@
+{%- liquid
+  assign align_map = 'items-start text-left,items-center text-center,items-end text-right' | split: ','
+  assign align_classes = align_map[1]
+  case section.settings.content_alignment
+    when 'left'
+      assign align_classes = align_map[0]
+    when 'right'
+      assign align_classes = align_map[2]
+  endcase
+-%}
 
+<section class="color-{{ section.settings.color_scheme }} relative overflow-hidden bg-background text-foreground">
+  <div class="relative min-h-hero-sm w-full md:min-h-hero">
+    {%- if section.settings.image != blank -%}
+      <img
+        src="{{ section.settings.image | image_url: width: 2000 }}"
+        srcset="{{ section.settings.image | image_url: width: 800 }} 800w, {{ section.settings.image | image_url: width: 1400 }} 1400w, {{ section.settings.image | image_url: width: 2000 }} 2000w"
+        sizes="100vw"
+        alt="{{ section.settings.image.alt | escape }}"
+        width="{{ section.settings.image.width }}"
+        height="{{ section.settings.image.height }}"
+        loading="eager"
+        fetchpriority="high"
+        class="absolute inset-0 size-full object-cover"
+      >
+      <div class="absolute inset-0 bg-foreground/20"></div>
+    {%- else -%}
+      {{ 'hero-apparel-1' | placeholder_svg_tag: 'absolute inset-0 size-full object-cover text-foreground/10' }}
+    {%- endif -%}
 
-<div>
-    {{ 'hero-apparel-1' | placeholder_svg_tag }}
-</div>
+    <div class="container-page relative flex min-h-hero-sm flex-col justify-center py-16 md:min-h-hero {{ align_classes }}">
+      <div class="flex max-w-xl flex-col gap-5 {% if section.settings.image != blank %}text-background{% endif %}">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="heading-eyebrow {% if section.settings.image != blank %}text-background/80{% endif %}">{{ section.settings.eyebrow }}</p>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h1 class="text-display font-heading font-bold">{{ section.settings.heading }}</h1>
+        {%- endif -%}
+        {%- if section.settings.subheading != blank -%}
+          <p class="text-body-lg {% if section.settings.image != blank %}text-background/90{% else %}text-foreground/80{% endif %}">{{ section.settings.subheading }}</p>
+        {%- endif -%}
+
+        {%- if section.settings.button_label != blank or section.settings.button_label_secondary != blank -%}
+          <div class="mt-2 flex flex-wrap gap-3 {% if section.settings.content_alignment == 'center' %}justify-center{% elsif section.settings.content_alignment == 'right' %}justify-end{% endif %}">
+            {%- if section.settings.button_label != blank -%}
+              <a href="{{ section.settings.button_link | default: '#' }}" class="btn-primary">{{ section.settings.button_label }}</a>
+            {%- endif -%}
+            {%- if section.settings.button_label_secondary != blank -%}
+              <a href="{{ section.settings.button_link_secondary | default: '#' }}" class="btn-secondary">{{ section.settings.button_label_secondary }}</a>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
 
 {% schema %}
 {
-    "name": "Hero Banner",
-    "settings": [],
-    "presets": [
-        {
-            "name": "Hero Banner"
-        }
-    ]
+  "name": "Hero banner",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-3"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background image"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "New arrivals"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Everyday essentials, made to last"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Thoughtfully designed pieces, crafted from premium materials and built for years of wear."
+    },
+    {
+      "type": "select",
+      "id": "content_alignment",
+      "label": "Content alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Primary button"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Label",
+      "default": "Shop now"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Secondary button"
+    },
+    {
+      "type": "text",
+      "id": "button_label_secondary",
+      "label": "Label"
+    },
+    {
+      "type": "url",
+      "id": "button_link_secondary",
+      "label": "Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero banner"
+    }
+  ]
 }
 {% endschema %}

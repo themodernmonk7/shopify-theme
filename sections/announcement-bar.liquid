@@ -1,3 +1,59 @@
-<p>
-    This is announcement bar
-</p>
+{%- if section.blocks.size > 0 -%}
+  <div class="color-{{ section.settings.color_scheme }} bg-background text-foreground">
+    <div class="container-page">
+      <div class="flex items-center justify-center gap-6 overflow-x-auto py-2.5 text-xs font-medium tracking-wide">
+        {%- for block in section.blocks -%}
+          {%- if block.settings.link != blank -%}
+            <a href="{{ block.settings.link }}" class="shrink-0 transition-opacity hover:opacity-70" {{ block.shopify_attributes }}>
+              {{ block.settings.text }}
+            </a>
+          {%- else -%}
+            <span class="shrink-0" {{ block.shopify_attributes }}>{{ block.settings.text }}</span>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Announcement bar",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-2"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "announcement",
+      "name": "Announcement",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Free shipping on orders over $75"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 5,
+  "presets": [
+    {
+      "name": "Announcement bar",
+      "blocks": [
+        { "type": "announcement" }
+      ]
+    }
+  ]
+}
+{% endschema %}

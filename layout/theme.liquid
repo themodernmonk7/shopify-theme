@@ -1,20 +1,37 @@
 <!doctype html>
-<html lang="en">
+<html lang="{{ request.locale.iso_code }}">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Shopify Theme</title>
-    {% render 'theme-variables' %}
-    {{content_for_header}}
+    <title>
+      {{ page_title }}{% if current_tags %} &ndash; {{ 'general.meta.tags' | t: default: 'tagged' }} "{{ current_tags | join: ', ' }}"{% endif %}{% if current_page != 1 %} &ndash; {{ 'general.meta.page' | t: default: 'Page' }} {{ current_page }}{% endif %}{% unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless %}
+    </title>
+    {%- if page_description -%}
+      <meta name="description" content="{{ page_description | escape }}">
+    {%- endif -%}
+    <link rel="canonical" href="{{ canonical_url }}">
+    {%- if settings.favicon != blank -%}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+    {%- endif -%}
+
+    {%- render 'theme-variables' -%}
+    {{ content_for_header }}
     {{ 'tailwind.output.css' | asset_url | stylesheet_tag }}
+    <script>
+      window.themeSettings = { cartType: {{ settings.cart_type | json }} };
+    </script>
   </head>
-  <body>
-    <header>
-        {% sections 'header-group' %}
-    </header>
-    <main>{{content_for_layout}}</main>
-    <footer>
-        {% sections 'footer-group' %}
-    </footer>
+  <body class="color-{{ settings.color_schemes.first.id }}">
+    <a href="#main-content" class="skip-to-content-link">{{ 'general.accessibility.skip_to_content' | t: default: 'Skip to content' }}</a>
+
+    {% sections 'header-group' %}
+
+    <main id="main-content">{{ content_for_layout }}</main>
+
+    {% sections 'footer-group' %}
+
+    {% section 'cart-drawer' %}
+
+    <script src="{{ 'theme.js' | asset_url }}" defer></script>
   </body>
 </html>

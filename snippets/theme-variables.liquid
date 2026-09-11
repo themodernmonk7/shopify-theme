@@ -1,16 +1,56 @@
+{%- comment -%}
+  Renders every runtime design-token value as a CSS custom property.
+  This is the ONLY place that reads theme settings for tokens — every
+  section/snippet consumes the resulting variables (or the Tailwind
+  utilities generated from them in assets/tokens.css), never
+  `settings.*` directly, so a merchant edit here reaches every
+  component automatically.
+{%- endcomment -%}
+{%- style -%}
+  {{ settings.body_font | font_face: font_display: "swap" }}
+  {{ settings.heading_font | font_face: font_display: "swap" }}
 
-{% style %}
-{{ settings.body_font | font_face: font_display: "swap" }}
-{{ settings.heading_font | font_face: font_display: "swap" }}
   :root {
-    --page-width: {{ settings.page_width | divided_by: 16.0 | append: "rem"}}
+    /* Typography */
+    --font-body: {{ settings.body_font.family }}, {{ settings.body_font.fallback_families }};
+    --font-body-style: {{ settings.body_font.style }};
+    --font-body-weight: {{ settings.body_font.weight }};
+    --font-heading: {{ settings.heading_font.family }}, {{ settings.heading_font.fallback_families }};
+    --font-heading-style: {{ settings.heading_font.style }};
+    --font-heading-weight: {{ settings.heading_font.weight }};
+    --body-scale: {{ settings.body_scale | default: 100 | divided_by: 100.0 }};
+    --heading-scale: {{ settings.heading_scale | default: 100 | divided_by: 100.0 }};
+
+    /* Shape */
+    --radius-base: {{ settings.radius_base | default: 8 }}px;
+
+    /* Layout */
+    --page-width: {{ settings.page_width | divided_by: 16.0 }}rem;
     --page-padding-mobile: {{ settings.page_padding }}px;
     --page-padding-desktop: {{ settings.page_padding_desktop }}px;
-    --body-font: {{ settings.body_font.family }}, {{ settings.body_font.fallback_families }}
-    --body-font-style: {{ settings.body_font.style }}
-    --body-font-weight: {{ settings.body_font.weight }}
-    --heading-font: {{ settings.heading_font.family }}, {{ settings.heading_font.fallback_families }}
-    --heading-font-style: {{ settings.heading_font.style }}
-    --heading-font-weight: {{ settings.heading_font.weight }}
+    --section-spacing: {{ settings.section_spacing }}px;
+
+    /* Brand accents (global, independent of color schemes) */
+    --color-accent-color: {{ settings.accent_color }};
+    --color-sale-color: {{ settings.sale_color }};
+    --color-success-color: {{ settings.success_color }};
   }
-{% endstyle %}
+
+  html {
+    font-size: calc(100% * var(--body-scale));
+  }
+
+  {%- comment -%} Color schemes: one class per merchant-defined scheme. {%- endcomment -%}
+  {%- for scheme in settings.color_schemes -%}
+    .color-{{ scheme.id }} {
+      --color-background: {{ scheme.settings.background }};
+      --color-foreground: {{ scheme.settings.text }};
+      --color-border: {{ scheme.settings.border }};
+      --color-primary-button: {{ scheme.settings.primary_button }};
+      --color-primary-button-text: {{ scheme.settings.primary_button_text }};
+      --color-secondary-button: {{ scheme.settings.secondary_button }};
+      --color-secondary-button-text: {{ scheme.settings.secondary_button_text }};
+      --color-link: {{ scheme.settings.link }};
+    }
+  {%- endfor -%}
+{%- endstyle -%}

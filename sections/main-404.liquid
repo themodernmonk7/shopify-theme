@@ -1,0 +1,22 @@
+<div class="color-{{ section.settings.color_scheme }} bg-background text-foreground">
+  <div class="container-page section-y flex flex-col items-center gap-4 text-center">
+    <p class="heading-eyebrow">404</p>
+    <h1 class="text-h1 font-heading font-bold">{{ 'general.404.title' | t: default: 'Page not found' }}</h1>
+    <p class="max-w-md text-foreground/70">{{ 'general.404.text' | t: default: "The page you're looking for doesn't exist or has been moved." }}</p>
+    <a href="{{ routes.root_url }}" class="btn-primary mt-2">{{ 'general.404.link' | t: default: 'Return to homepage' }}</a>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "404 page",
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,95 @@
+/**
+ * Design tokens
+ * ------------------------------------------------------------
+ * Single source of truth for the theme's visual language.
+ *
+ * Two layers work together:
+ *  1. Runtime values — plain CSS custom properties written to
+ *     `:root` (and `.color-*` scheme classes) by
+ *     snippets/theme-variables.liquid, sourced from the Shopify
+ *     theme editor (settings_schema.json). Merchants change
+ *     these without touching code.
+ *  2. Tailwind tokens — the `@theme` blocks below turn those
+ *     variables (plus fixed developer-level scales) into
+ *     Tailwind utilities, so components never hardcode a color,
+ *     radius, shadow or font. Change a token here, or a setting
+ *     in the theme editor, and every usage updates.
+ *
+ * `@theme inline` tells Tailwind to reference the custom
+ * property directly at runtime instead of inlining its value at
+ * build time — required for anything driven by Liquid/merchant
+ * settings. See https://tailwindcss.com/docs/theme#theme-inline
+ */
+
+@theme inline {
+  /* Semantic color tokens -> bg-*, text-*, border-*, ring-*, fill-* */
+  --color-background: var(--color-background);
+  --color-foreground: var(--color-foreground);
+  --color-border: var(--color-border);
+
+  --color-button: var(--color-primary-button);
+  --color-button-foreground: var(--color-primary-button-text);
+  --color-button-secondary: var(--color-secondary-button);
+  --color-button-secondary-foreground: var(--color-secondary-button-text);
+
+  --color-link: var(--color-link);
+  --color-accent: var(--color-accent-color);
+  --color-sale: var(--color-sale-color);
+  --color-success: var(--color-success-color);
+
+  /* Typography -> font-body, font-heading */
+  --font-body: var(--font-body);
+  --font-heading: var(--font-heading);
+
+  /* Shape -> rounded-* (derived from a single merchant-controlled base) */
+  --radius-xs: calc(var(--radius-base) * 0.5);
+  --radius-sm: var(--radius-base);
+  --radius-md: calc(var(--radius-base) * 1.5);
+  --radius-lg: calc(var(--radius-base) * 2.5);
+  --radius-xl: calc(var(--radius-base) * 4);
+
+  /* Layout -> max-w-page, p/gap/m-page-x, py-section-y */
+  --container-page: var(--page-width);
+  --spacing-page-x: var(--page-padding-mobile);
+  --spacing-page-x-lg: var(--page-padding-desktop);
+  --spacing-section-y: var(--section-spacing);
+  --spacing-section-y-sm: calc(var(--section-spacing) / 2);
+
+  /* Hero height -> min-h-hero-sm (mobile), min-h-hero (desktop) */
+  --spacing-hero-sm: 70svh;
+  --spacing-hero: 85svh;
+}
+
+@theme {
+  /* Fluid heading scale -> text-display, text-h1, text-h2, text-h3, text-body-lg
+     Each pairs a clamp() size with a line-height via the Tailwind v4
+     `--text-*--line-height` companion variable, so no component ever
+     needs a hardcoded font-size or a manual sm:/md:/lg: size ladder. */
+  --text-display: calc(var(--heading-scale, 1) * clamp(2.5rem, 1.9rem + 2.6vw, 4.5rem));
+  --text-display--line-height: 1.05;
+
+  --text-h1: calc(var(--heading-scale, 1) * clamp(2rem, 1.6rem + 1.8vw, 3.25rem));
+  --text-h1--line-height: 1.1;
+
+  --text-h2: calc(var(--heading-scale, 1) * clamp(1.5rem, 1.3rem + 1vw, 2.25rem));
+  --text-h2--line-height: 1.15;
+
+  --text-h3: calc(var(--heading-scale, 1) * clamp(1.25rem, 1.15rem + 0.4vw, 1.5rem));
+  --text-h3--line-height: 1.3;
+
+  --text-body-lg: clamp(1rem, 0.95rem + 0.2vw, 1.125rem);
+  --text-body-lg--line-height: 1.6;
+
+  /* Elevation -> shadow-card, shadow-dropdown, shadow-drawer */
+  --shadow-card: 0 1px 2px rgba(20, 20, 20, 0.04), 0 8px 24px -8px rgba(20, 20, 20, 0.1);
+  --shadow-dropdown: 0 12px 32px -8px rgba(20, 20, 20, 0.18);
+  --shadow-drawer: -16px 0 40px -12px rgba(20, 20, 20, 0.2);
+
+  /* Motion -> duration-fast/base/slow via arbitrary use, ease-default */
+  --ease-default: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Media ratios -> aspect-portrait, aspect-landscape, aspect-square (built in) */
+  --aspect-portrait: 3 / 4;
+  --aspect-landscape: 4 / 3;
+  --aspect-wide: 16 / 9;
+}
