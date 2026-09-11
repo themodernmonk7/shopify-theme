@@ -4,10 +4,16 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Shopify Theme</title>
+    {% render 'theme-variables' %}
     {{content_for_header}}
   </head>
   <body>
-    <header>Our store</header>
+    <header>
+        {% sections 'header-group' %}
+    </header>
     <main>{{content_for_layout}}</main>
+    <footer>
+        {% sections 'footer-group' %}
+    </footer>
   </body>
 </html>
