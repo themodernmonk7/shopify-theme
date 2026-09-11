@@ -6,6 +6,7 @@
     <title>Shopify Theme</title>
     {% render 'theme-variables' %}
     {{content_for_header}}
+    {{ 'tailwind.output.css' | asset_url | stylesheet_tag }}
   </head>
   <body>
     <header>
